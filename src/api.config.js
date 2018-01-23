@@ -7,7 +7,8 @@
 //自有接口
 
 
-const URL_API_ROOT = "http://192.168.0.171:8082/api";  // development开发环境
+// const URL_API_ROOT = "http://192.168.0.171:8082/api";  // development开发环境
+const URL_API_ROOT = "/api";  // development开发环境
 // const URL_API_ROOT = "http://ss.api.imi78.com/api"; // production生产环境
 
 //构建接口地址

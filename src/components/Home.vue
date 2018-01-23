@@ -89,7 +89,7 @@
 </style>
 <script>
 
-  let localObj = JSON.parse(localStorage.getItem("_ifo"))||{};
+  let localObj = JSON.parse(localStorage.getItem("_ifo")) || {};
   let gameid = localObj.gameid || "";
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -149,6 +149,7 @@
     };
   });
 
+  import axios from 'axios';
 
   export default {
     data() {
@@ -189,6 +190,14 @@
       }
     },
     created(){
+//      axios.post('/api/getuser')
+//        .then(function (response) {
+//          console.log(response.data);
+//        })
+//        .catch(function (error) {
+//          console.log(error);
+//        });
+
       window.$vue = this;
       this.getUserInfo();
     },
