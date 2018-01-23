@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vonic from 'vonic'
 import FloatBtn from './components/common/FloatBtn.vue'
+import {PAGE_SIZE} from "./constant";
 import api from "./api.config";
 import ajax from './ajax'
 import routes from "./router";
@@ -13,6 +14,8 @@ Vue.component(
 
 //CI api
 Vue.prototype.$api = api;
+//global variable(page size)
+Vue.prototype.$page = 10;
 
 //CI ajax
 Vue.prototype.$ajax = ajax;

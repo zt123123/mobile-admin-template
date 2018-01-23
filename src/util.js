@@ -281,11 +281,10 @@ util.responseLog = function (data) {
       this.imiLog(`| ${key}:${data[key]} |`, resStyle);
     }
   }
-  this.imiLog("--------http响应end----------------------------------------", resStyle);
+  this.imiLog("-----http响应end--------------------------------------", resStyle);
 };
 
 util.errorLog = function (error) {
-  $loading.hide();
   this.imiLog("-----http响应，网络异常-----", errStyle);
   this.imiLog(`网络请求失败,错误描述:${error.message}`, errStyle);
 };

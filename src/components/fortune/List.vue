@@ -15,7 +15,7 @@
           {{fortunelist.cashamount}}
         </div>
       </hl-item>
-      <hl-item class="item-icon-right">
+      <hl-item @click.native="$router.forward('/cash')" class="item-icon-right">
         未提现
         <div class="item-note">
           {{fortunelist.notamount}}
@@ -78,8 +78,11 @@
     methods: {
       getFortuneInfo: function () {
         this.$ajax.doAjaxRequest(this.$api.fortune, {}, data => {
+          if (data.itemcount == 0 || data.itemcount <= this.$page) {
+            this.infiniteCount = 0;
+          }
           this.fortunelist = data.item;
-        }, null, false);
+        });
       },
 
       getCashList: function () {
@@ -104,7 +107,7 @@
       onInfinite(done) {
         this.$ajax.doAjaxRequest(this.$api.withdrawalslist,
           {
-              "page": ++this.page
+            "page": ++this.page
           },
           data => {
             if (data.itemcount == 0) {

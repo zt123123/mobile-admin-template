@@ -18,25 +18,25 @@
       <hl-item class="item-icon-right">
         税款
         <div class="item-note">
-          {{tax}}
+          {{calculateTax}}
         </div>
       </hl-item>
       <hl-item class="item-icon-right">
         实得数额
         <div class="item-note">
-          {{getCount}}
+          {{calculateRealCount}}
         </div>
       </hl-item>
       <hl-item class="item-icon-right">
         剩余财富
         <div class="item-note">
-          {{restCount}}
+          {{calculateRestCount}}
         </div>
       </hl-item>
 
       <div class="padding">
-        <md-button class="button button-assertive button-block" @click.native="onButtonClicked()">自动提现</md-button>
-        <md-button class="button button-positive button-block">手动提现</md-button>
+        <md-button class="button button-assertive button-block" @click.native="cash('auto')">自动提现</md-button>
+        <md-button class="button button-positive button-block" @click.native="cash('self')">手动提现</md-button>
       </div>
 
       <div style="height: 100px"></div>
@@ -51,13 +51,19 @@
       return {
         list: {},
         count: 0,
-        totalCount: 0,
         tax: 0,
-        getCount: "0",
-        restCount: "0",
-        min: 0,
-        max: 10000,
-        num: 0
+        totalCount: 0
+      }
+    },
+    computed: {
+      calculateTax () {
+        return this.count * (this.tax / 100);
+      },
+      calculateRealCount () {
+        return this.count - this.calculateTax;
+      },
+      calculateRestCount () {
+        return (this.totalCount - this.count).toFixed(2);
       }
     },
     mounted() {
@@ -69,23 +75,43 @@
           this.list = data;
           //初始化
           this.totalCount = this.list.totalamount;
-          this.getCount = this.calculateRealCount();
-          this.tax = this.calculateTax();
-          this.restCount = this.calculateRestCount();
+          this.tax = this.list.tax;
+        });
+      },
 
-        }, null, false);
+      checkCount(){
+        if (this.count < 1) {
+          $toast.show("提现数额不能小于1元");
+          return false;
+        } else if (this.count == "") {
+          $toast.show("提现数额不能为空");
+          return false;
+        }
+        return true;
       },
-      calculateTax: function () {
-        return count * (this.list.tax / 100);
+
+      cash (type) {
+        let url = "";
+        if (this.checkCount() == false) {
+          return;
+        }
+        if (type == 'auto') {
+          url = this.$api.withdrawals;
+        } else {
+          url = this.$api.manual_withdrawals;
+        }
+        this.$ajax.doAjaxRequest(url, {"money": this.count}, data => {
+
+          setTimeout(function () {
+            $toast.show(data.errordesc, 1500);
+          }, 1000);
+          setTimeout(function () {
+            $router.forward("/fortune");
+          }, 2000)
+        });
       },
-      calculateRealCount: function () {
-        return count - this.calculateTax();
-      },
-      calculateRestCount: function () {
-        return (this.totalCount - count).toFixed(2);
-      },
+
       enterNum(){
-
         let options = {
           effect: 'scale',
           title: '请输入数额',
@@ -94,17 +120,12 @@
             {text: '取消'},
           ]
         };
-//      <von-input
-//        type="text"
-//        v-model="username"
-//        placeholder="用户名/手机/邮箱"
-//        label="用户名">
-//          </von-input>
-        let popup = $popup.fromTemplate(`<input placeholder="请输入数额" style="padding-left: 5px;border: 1px solid #d2d2d2;" type="text">`, options);
+        let popup = $popup.fromTemplate(`<input id="cashNum" placeholder="请输入数额" style="padding-left: 5px;border: 1px solid #d2d2d2;" type="text">`, options);
 
         popup.show().then((buttonIndex) => {
-          if(buttonIndex==0){
-            console.log();
+          if (buttonIndex == 0) {
+            let dom = document.getElementById("cashNum");
+            this.count = dom.value;
           }
         })
       }

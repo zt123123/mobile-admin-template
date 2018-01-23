@@ -120,7 +120,6 @@
     }
 
     function sharePlayer() {
-
       window.location.href = "http://wx.imi78.com/wx_game_register?gameid=" + gameid + "&from=0";
     }
 

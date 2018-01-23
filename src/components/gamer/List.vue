@@ -36,7 +36,7 @@
     methods: {
       getList: function (done) {
         this.$ajax.doAjaxRequest(this.$api.getuserlist, {"nickname": this.keywords}, data => {
-          if (data.itemcount == 0) {
+          if (data.itemcount == 0 || data.itemcount <= this.$page) {
             this.infiniteCount = 0;
           }
           this.list = data.itemlist;

@@ -20,10 +20,6 @@ const errorInfo = {
 
 let doAjaxResponse = function (data, successCallback, errorCallback, uniHandle) {
 
-
-
-
-
   //令牌错误，直接处理
   if (data.errorcode == errorInfo.token.errorcode) {
     util.showModal(null, errorInfo.token.errordesc, util.jumpToLogin);
@@ -31,9 +27,8 @@ let doAjaxResponse = function (data, successCallback, errorCallback, uniHandle) 
   }
 
   //一般错误，判断是否统一处理
-  if (data.errorcode != errorInfo.success.errorcode &&
-    uniHandle == true) {
-    util.showModal(null,data.errordesc);
+  if (data.errorcode != errorInfo.success.errorcode && uniHandle == true) {
+    util.showModal(null, data.errordesc);
     return false;
   }
 
@@ -43,6 +38,7 @@ let doAjaxResponse = function (data, successCallback, errorCallback, uniHandle) 
 };
 
 imi.doAjaxRequest = function (url, data = {}, successCallback, errorCallback, uniHandle = true, method = "post") {
+  $loading.show();
 
   util.requestLog(url, method, data);
   let token = $storage.get("token");
@@ -64,7 +60,5 @@ imi.doAjaxRequest = function (url, data = {}, successCallback, errorCallback, un
     util.showModal(error);
     errorCallback && errorCallback(error);
   });
-
-  $loading.show();
 };
 export default imi;

@@ -49,6 +49,9 @@
     methods: {
       getList: function (done) {
         this.$ajax.doAjaxRequest(this.$api.sellerslist, {}, data => {
+          if (data.itemcount == 0 || data.itemcount <= this.$page) {
+            this.infiniteCount = 0;
+          }
           this.list = data.itemlist;
           done && done();
         }, null);

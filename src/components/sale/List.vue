@@ -52,7 +52,7 @@
         flag2: false,
         isDisable: false,
         searchList: [],
-        acer: $storage.get("acer") || 0,
+        acer: $storage.get("_ifo").acer || 0,
         code: "",
         num: "",
         selfPage: false,
@@ -67,12 +67,18 @@
     methods: {
       getList: function (done) {
         this.$ajax.doAjaxRequest(this.$api.sellerslist, {"pagesize": "15"}, data => {
+          if (data.itemcount == 0 || data.itemcount <= this.$page) {
+            this.infiniteCount = 0;
+          }
           this.list = data.itemlist;
           done && done();
         });
       },
       onRefresh(done) {
         this.getList(done);
+      },
+      onItemClick(index){
+        console.log(index);
       }
     }
   };
