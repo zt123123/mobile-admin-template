@@ -70,7 +70,7 @@ app.use(staticPath, express.static('./static'))
 var vonicPath = path.posix.join(config.dev.assetsPublicPath, 'vonic')
 app.use(vonicPath, express.static('./node_modules/vonic/dist'))
 
-var uri = 'localhost:' + port
+var uri = '192.168.0.177:' + port
 
 devMiddleware.waitUntilValid(function () {
   console.log('> Listening at ' + uri + '\n')
